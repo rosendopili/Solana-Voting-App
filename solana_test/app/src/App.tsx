@@ -145,6 +145,14 @@ function App() {
         {!publicKey ? (
           <div className="cta">
             <p>Connect your wallet to cast your vote!</p>
+            <a 
+              href="https://phantom.com/learn/guides/how-to-create-a-new-wallet" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="create-wallet-link"
+            >
+              <button className="create-wallet-btn">Create New Wallet</button>
+            </a>
           </div>
         ) : (
           <>

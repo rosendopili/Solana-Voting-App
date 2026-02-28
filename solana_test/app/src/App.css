@@ -156,3 +156,19 @@ button:disabled {
   margin: 0;
   font-size: 1.1rem;
 }
+
+.create-wallet-link {
+  display: block;
+  margin-top: 1.5rem;
+  text-decoration: none;
+}
+
+.create-wallet-btn {
+  width: 100%;
+  background-color: transparent;
+  border: 1px solid #646cff;
+}
+
+.create-wallet-btn:hover {
+  background-color: rgba(100, 108, 255, 0.1);
+}
