@@ -4,6 +4,7 @@ import path from 'path'
 
 // https://vite.dev/config/
 export default defineConfig({
+  base: '/Solana-Voting-App-/',
   plugins: [react()],
   define: {
     global: 'globalThis',
