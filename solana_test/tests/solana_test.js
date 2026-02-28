@@ -99,4 +99,4 @@ describe("solana_test", () => {
     const voterAccount = await program.account.voter.fetch(voterPda);
     expect(voterAccount.provider).to.equal("MyAI");
   });
-});
+}); 
