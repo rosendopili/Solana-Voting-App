@@ -119,9 +119,30 @@ function App() {
   return (
     <div className="App">
       <header>
-        <h1>AI Provider Voting</h1>
-        <WalletMultiButton />
+        <h1>Proof of Preference</h1>
+        <p className="subtitle">Vote for your favorite AI provider using the power of blockchain.</p>
       </header>
+
+      <section className="instructions">
+        <h3>Instructions:</h3>
+        <ol>
+          <li>Connect your Solana Wallet to get started.</li>
+          <li>If you don't have a wallet, <a href="https://phantom.com/learn/guides/how-to-create-new-wallet" target="_blank" rel="noopener noreferrer">sign up for one</a>.</li>
+          <li>Cast a vote for your favorite AI provider.</li>
+        </ol>
+      </section>
+
+      <div className="wallet-actions">
+        <WalletMultiButton />
+        <a 
+          href="https://phantom.com/learn/guides/how-to-create-a-new-wallet" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          className="create-wallet-link-standalone"
+        >
+          <button className="create-wallet-btn">Create New Wallet</button>
+        </a>
+      </div>
 
       {error && <div className="error-banner">{error}</div>}
 
@@ -129,32 +150,57 @@ function App() {
         <div className="results">
           <h2>Current Standings:</h2>
           {pollData ? (
-            <ul>
-              <li><span>Gemini</span> <strong>{pollData.gemini?.toString() || "0"}</strong></li>
-              <li><span>ChatGPT</span> <strong>{pollData.chatgpt?.toString() || "0"}</strong></li>
-              <li><span>Perplexity</span> <strong>{pollData.perplexity?.toString() || "0"}</strong></li>
-              <li><span>Claude</span> <strong>{pollData.claude?.toString() || "0"}</strong></li>
-              <li><span>DeepSeek</span> <strong>{pollData.deepseek?.toString() || "0"}</strong></li>
-              <li><span>Other</span> <strong>{pollData.other?.toString() || "0"}</strong></li>
-            </ul>
+            <>
+              <ul>
+                {[
+                  { name: "Gemini", count: pollData.gemini },
+                  { name: "ChatGPT", count: pollData.chatgpt },
+                  { name: "Perplexity", count: pollData.perplexity },
+                  { name: "Claude", count: pollData.claude },
+                  { name: "DeepSeek", count: pollData.deepseek },
+                  { name: "Other", count: pollData.other },
+                ].map((item) => {
+                  const totalVotes = 
+                    (pollData.gemini?.toNumber() || 0) +
+                    (pollData.chatgpt?.toNumber() || 0) +
+                    (pollData.perplexity?.toNumber() || 0) +
+                    (pollData.claude?.toNumber() || 0) +
+                    (pollData.deepseek?.toNumber() || 0) +
+                    (pollData.other?.toNumber() || 0);
+                  
+                  const count = item.count?.toNumber() || 0;
+                  const percentage = totalVotes > 0 ? ((count / totalVotes) * 100).toFixed(1) : "0.0";
+
+                  return (
+                    <li key={item.name}>
+                      <div className="bar-label">
+                        <span>{item.name}</span>
+                        <strong>{percentage}%</strong>
+                      </div>
+                      <div className="bar-container">
+                        <div className="bar-fill" style={{ width: `${percentage}%` }}></div>
+                      </div>
+                    </li>
+                  );
+                })}
+              </ul>
+              <div className="total-votes">
+                Total Votes: <strong>{
+                  ((pollData.gemini?.toNumber() || 0) +
+                  (pollData.chatgpt?.toNumber() || 0) +
+                  (pollData.perplexity?.toNumber() || 0) +
+                  (pollData.claude?.toNumber() || 0) +
+                  (pollData.deepseek?.toNumber() || 0) +
+                  (pollData.other?.toNumber() || 0)).toString()
+                }</strong>
+              </div>
+            </>
           ) : (
             <p>Loading results from Devnet...</p>
           )}
         </div>
 
-        {!publicKey ? (
-          <div className="cta">
-            <p>Connect your wallet to cast your vote!</p>
-            <a 
-              href="https://phantom.com/learn/guides/how-to-create-a-new-wallet" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="create-wallet-link"
-            >
-              <button className="create-wallet-btn">Create New Wallet</button>
-            </a>
-          </div>
-        ) : (
+        {!publicKey ? null : (
           <>
             {votedProvider ? (
               <div className="voted-status">
@@ -190,6 +236,11 @@ function App() {
           </>
         )}
       </main>
+      <footer className="powered-by">
+        <a href="https://mlh.link/solana" target="_blank" rel="noopener noreferrer">
+          Powered by Solana
+        </a>
+      </footer>
     </div>
   )
 }
